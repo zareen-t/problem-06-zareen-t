@@ -3,28 +3,29 @@
 //Below is an object containing different color palettes that you will show
 //Palettes from ColorBrewer (http://colorbrewer2.org/)
 const COLORS_9 = {
-  Spectral: ['#d53e4f','#f46d43','#fdae61','#fee08b','#ffffbf','#e6f598','#abdda4','#66c2a5','#3288bd'],
-  Reds: ['#fff5f0','#fee0d2','#fcbba1','#fc9272','#fb6a4a','#ef3b2c','#cb181d','#a50f15','#67000d'],
-  Blues: ['#f7fbff','#deebf7','#c6dbef','#9ecae1','#6baed6','#4292c6','#2171b5','#08519c','#08306b'],
-  Greens: ['#f7fcf5','#e5f5e0','#c7e9c0','#a1d99b','#74c476','#41ab5d','#238b45','#006d2c','#00441b'],
-  Purples: ['#fcfbfd','#efedf5','#dadaeb','#bcbddc','#9e9ac8','#807dba','#6a51a3','#54278f','#3f007d'],
+  Spectral: ['#d53e4f', '#f46d43', '#fdae61', '#fee08b', '#ffffbf', '#e6f598', '#abdda4', '#66c2a5', '#3288bd'],
+  Reds: ['#fff5f0', '#fee0d2', '#fcbba1', '#fc9272', '#fb6a4a', '#ef3b2c', '#cb181d', '#a50f15', '#67000d'],
+  Blues: ['#f7fbff', '#deebf7', '#c6dbef', '#9ecae1', '#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b'],
+  Greens: ['#f7fcf5', '#e5f5e0', '#c7e9c0', '#a1d99b', '#74c476', '#41ab5d', '#238b45', '#006d2c', '#00441b'],
+  Purples: ['#fcfbfd', '#efedf5', '#dadaeb', '#bcbddc', '#9e9ac8', '#807dba', '#6a51a3', '#54278f', '#3f007d'],
 };
 
 /* Your code goes here! */
 
 //Create a variable `h1` that refers to the `<h1>` element in the DOM.
-
+let h1 = document.querySelector('h1');
 
 //Change the `textContent` of the `<h1>` element to be "Which Swatch?"
-
+h1.textContent = 'Which Swatch?';
 
 //Somehow the rainbow icon image was included without an alt tag! Set its `alt`
 //attribute to be "A beautiful rainbow".
-
+let img = document.querySelector('img');
+img.alt = 'A beautiful rainbow';
 
 //Give the image the Bootstrap-provided `float-right` CSS class to make it float
 //to the right of the screen
-
+img.classList.add('float-right');
 
 /*Define a function `createColorBox()` that takes in two parameters: a color 
 string (e.g., "blue") and a numeric size (in pixels, e.g., 100). The function 
@@ -38,7 +39,14 @@ should do the following:
 You can test this function by logging out the returned value and checking its
 attributes.
 */
-
+function createColorBox(color, size) {
+  let div = document.createElement('div');
+  div.classList.add('d-inline-block');
+  div.style.backgroundColor = color;
+  div.style.width = `${size}px`;
+  div.style.height = `${size}px`;
+  return div;
+}
 
 
 /* Define a function `getElementWidth()` that takes in a DOM element (not a 
@@ -50,8 +58,14 @@ element.
    NOTE: The `getBoundingClientRect()` method already exists; do not define a
    new function for it! Just call the method on the DOM element.
 */
+function getElementWidth(element) {
+  let { width } = element.getBoundingClientRect();
+  return width;
+}
 
-
+// let myElement = document.querySelector('.my-element-class');
+// let elementWidth = getElementWidth(myElement);
+// console.log(elementWidth);
 
 /* Define a function `renderPaletteRow()` that takes in two arguments: array of 
 color strings (like a SINGLE ELEMENT of the `COLORS_9` object), and a "parent" 
@@ -73,7 +87,16 @@ browser window unless you refresh.
 
 You should NOT include any test calls when running Jest tests!
 */
-
+function renderPaletteRow(array, parent) {
+  let rowDiv = document.createElement('div');
+  let parentWidth = getElementWidth(parent);
+  let colorBoxWidth = parentWidth / array.length;
+  array.forEach((color) => {
+    let colorBox = createColorBox(color, colorBoxWidth);
+    rowDiv.appendChild(colorBox);
+  });
+  parent.appendChild(rowDiv);
+}
 
 
 /* Define a function `renderPaletteTable()` that takes no arguments and renders 
@@ -86,19 +109,27 @@ Tip: note that `COLORS_9` is an object, not an array! You'll need to use a
 
 Call your `renderPaletteTable()` method to display all the color palettes!
 */
+function renderPaletteTable() {
+  let mainElement = document.querySelector('main');
+  for (let i in COLORS_9) {
+    let array = COLORS_9[i];
+    renderPaletteRow(array, mainElement);
+  }
+}
 
-
+renderPaletteTable();
 
 //Finally, remove the paragraph in the header that explains how to complete the 
 //problem.
-
+let header = document.querySelector('header');
+header.removeChild(header.querySelector('p'));
 
 
 //Make functions and variables available to tester. DO NOT MODIFY THIS.
-if(typeof module !== 'undefined' && module.exports){
+if (typeof module !== 'undefined' && module.exports) {
   /* eslint-disable */
-  if(typeof createColorBox !== 'undefined') 
+  if (typeof createColorBox !== 'undefined')
     module.exports.createColorBox = createColorBox;
-  if(typeof renderPaletteRow !== 'undefined') 
+  if (typeof renderPaletteRow !== 'undefined')
     module.exports.renderPalette = renderPaletteRow;
 }
