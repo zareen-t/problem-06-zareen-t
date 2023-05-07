@@ -13,14 +13,14 @@ const COLORS_9 = {
 /* Your code goes here! */
 
 //Create a variable `h1` that refers to the `<h1>` element in the DOM.
-let h1 = document.querySelector('h1');
+const h1 = document.querySelector('h1');
 
 //Change the `textContent` of the `<h1>` element to be "Which Swatch?"
 h1.textContent = 'Which Swatch?';
 
 //Somehow the rainbow icon image was included without an alt tag! Set its `alt`
 //attribute to be "A beautiful rainbow".
-let img = document.querySelector('img');
+const img = document.querySelector('img');
 img.alt = 'A beautiful rainbow';
 
 //Give the image the Bootstrap-provided `float-right` CSS class to make it float
@@ -40,7 +40,7 @@ You can test this function by logging out the returned value and checking its
 attributes.
 */
 function createColorBox(color, size) {
-  let div = document.createElement('div');
+  const div = document.createElement('div');
   div.classList.add('d-inline-block');
   div.style.backgroundColor = color;
   div.style.width = `${size}px`;
@@ -59,7 +59,7 @@ element.
    new function for it! Just call the method on the DOM element.
 */
 function getElementWidth(element) {
-  let { width } = element.getBoundingClientRect();
+  const { width } = element.getBoundingClientRect();
   return width;
 }
 
@@ -88,11 +88,11 @@ browser window unless you refresh.
 You should NOT include any test calls when running Jest tests!
 */
 function renderPaletteRow(array, parent) {
-  let rowDiv = document.createElement('div');
-  let parentWidth = getElementWidth(parent);
-  let colorBoxWidth = parentWidth / array.length;
+  const rowDiv = document.createElement('div');
+  const parentWidth = getElementWidth(parent);
+  const width = parentWidth / array.length;
   array.forEach((color) => {
-    let colorBox = createColorBox(color, colorBoxWidth);
+    const colorBox = createColorBox(color, width);
     rowDiv.appendChild(colorBox);
   });
   parent.appendChild(rowDiv);
@@ -110,9 +110,9 @@ Tip: note that `COLORS_9` is an object, not an array! You'll need to use a
 Call your `renderPaletteTable()` method to display all the color palettes!
 */
 function renderPaletteTable() {
-  let mainElement = document.querySelector('main');
-  for (let i in COLORS_9) {
-    let array = COLORS_9[i];
+  const mainElement = document.querySelector('main');
+  for (const i in COLORS_9) {
+    const array = COLORS_9[i];
     renderPaletteRow(array, mainElement);
   }
 }
@@ -121,7 +121,7 @@ renderPaletteTable();
 
 //Finally, remove the paragraph in the header that explains how to complete the 
 //problem.
-let header = document.querySelector('header');
+const header = document.querySelector('header');
 header.removeChild(header.querySelector('p'));
 
 

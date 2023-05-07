@@ -1,6 +1,7 @@
 'use strict';
 
 //Create a variable `form` that refers to the `<form>` element in the DOM.
+const form = document.querySelector('form');
 
 /* Add an event listener to the `form` element that will listen for `'submit'` 
 type events (which occur when the form is submitted). In the callback function 
@@ -23,7 +24,19 @@ for this event listener, do the following:
      correctness. "was-checked" would be a better classname, but Bootstrap 
      doesn't use that.
 */
+form.addEventListener('submit', (event) => {
+  event.preventDefault();
 
+  if (form.checkValidity()) {
+    form.classList.add('d-none');
+    const alertParagraph = document.querySelector('.alert');
+    alertParagraph.classList.remove('d-none');
+  } else {
+    form.classList.add('was-validated');
+    const submitButton = document.querySelector('button[type="submit"]');
+    submitButton.disabled = true;
+  }
+});
 
 
 /* You should now be able to submit the form and see it highlight fields that 
@@ -37,7 +50,7 @@ attributes, so you'll need to use JavaScript to handle that! */
 //This function takes in a Date type value and returns the number of years
 //since that date (based on the current time). For example, if run in 2020:
 //    getYearsSince("2001-01-01") // returns 19
-function getYearsSince(aDate){
+function getYearsSince(aDate) {
   /* global moment */
   moment.suppressDeprecationWarnings = true; //don't worry about these now
   return moment().diff(moment(aDate), 'years');
@@ -64,7 +77,23 @@ The "Date of Birth" should now show an error when empty or if the year is too
 recent; otherwise it should highlight as valid. Note that you'll need to hit
 "Sign me up!" first to enable the validation highlighting!
 */
+const dobInput = document.querySelector('#dobInput');
 
+// calc age of user
+dobInput.addEventListener('input', (event) => {
+  const dobValue = event.target.value;
+  const age = getYearsSince(dobValue);
+
+  // less than 13 or greater than 200, error string returned
+  if (age < 13 || age > 200) {
+    dobInput.setCustomValidity('You need to be at least 13 years old.');
+    const dobFeedback = document.querySelector('#dobFeedback');
+    dobFeedback.textContent = 'You need to be at least 13 years old.';
+  } else {
+    // clear custom validity error message
+    dobInput.setCustomValidity("");
+  }
+});
 
 
 /* Next you'll make sure the two "password" fields match. Start by defining a
@@ -80,14 +109,30 @@ function `validatePasswordMatch()`. This function should access both password
   Also change the `#passwordConfirmFeedback` element so its `textContent` is
   also blank (an empty string).
 */
+function validatePasswordMatch() {
+  const passwordInput = document.querySelector('#passwordInput');
+  const passwordConfirmInput = document.querySelector('#passwordConfirmInput');
+  const passwordConfirmFeedback = document.querySelector('#passwordConfirmFeedback');
 
+  if (passwordInput.value !== passwordConfirmInput.value) {
+    passwordConfirmInput.setCustomValidity("Passwords do not match");
+    passwordConfirmFeedback.textContent = "Passwords do not match";
+  } else {
+    passwordConfirmInput.setCustomValidity("");
+    passwordConfirmFeedback.textContent = "";
+  }
+}
 
 
 /* Assign the `validatePasswordMatch` function as the callback for `input` 
 events that happen on BOTH the `#passwordInput` and `#passwordConfirmInput`
 elements. You can select the elements individually or using `querySelectorAll()`.
 */
+const passwordMatch = document.querySelectorAll('#passwordInput, #passwordConfirmInput');
 
+passwordMatch.forEach(input => {
+  input.addEventListener('input', validatePasswordMatch);
+});
 
 
 /* Last you'll need to only enable the "submit" button if the form is valid. Use
@@ -104,13 +149,23 @@ if the form is valid (what to change the button to).
 This should disable the button until all of the fields are valid, but only after
 the user tries to submit once (which is a polite user experience)
 */
+const inputs = document.querySelectorAll('input');
+const submitButton = document.querySelector('button[type="submit"]');
+
+inputs.forEach(input => {
+  input.addEventListener('input', () => {
+    if (form.classList.contains('was-validated')) {
+      submitButton.disabled = !form.checkValidity();
+    }
+  });
+});
 
 
 
 
 //Make functions and variables available to tester. DO NOT MODIFY THIS.
-if(typeof module !== 'undefined' && module.exports){
+if (typeof module !== 'undefined' && module.exports) {
   /* eslint-disable */
-  if(typeof validatePasswordMatch !== 'undefined') 
+  if (typeof validatePasswordMatch !== 'undefined')
     module.exports.validatePasswordMatch = validatePasswordMatch;
 }
