@@ -2,6 +2,7 @@
 
 import { getIncompleteTasks } from './Model.js';
 
+// one task render
 function renderSingleTask(task, markCompleteCallback) {
     const li = document.createElement('li');
     li.classList.add('list-group-item');
@@ -19,6 +20,7 @@ function renderSingleTask(task, markCompleteCallback) {
     return li;
 }
 
+// task list
 function renderTaskList(markCompleteCallback) {
     const ul = document.createElement('ul');
     ul.classList.add('list-group', 'list-group-flush');

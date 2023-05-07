@@ -5,11 +5,13 @@ console.log(initialTasks);
 
 let currentTaskList = initialTasks.map((task, index) => {
     return {
+        // use the spread operator
         ...task,
         id: index + 1
     };
 });
 
+// function that returns tasks.
 function getIncompleteTasks() {
     return currentTaskList.filter(task => task.status === "incomplete");
 }
@@ -25,6 +27,7 @@ function addTask(description) {
     currentTaskList = [...currentTaskList, newTask];
 }
 
+// marks complete
 function markComplete(id) {
     currentTaskList = currentTaskList.map(task => {
         if (task.id === id) {
